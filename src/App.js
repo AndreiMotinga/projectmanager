@@ -1,20 +1,58 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import uuid from 'uuid';
+import Projects from './components/projects';
+import AddProject from './components/addProject';
+// import './App.css';
 
 class App extends Component {
+  constructor () {
+    super();
+    this.state = {
+      projects: []
+    }
+  }
+
+  componentWillMount() {
+    this.setState({projects: [
+      {
+        id: uuid.v4(),
+        title: "Business Website",
+        category: "Web Design"
+      },
+      {
+        id: uuid.v4(),
+        title: "Social App",
+        category: "Mobile Development"
+      },
+      {
+        id: uuid.v4(),
+        title: "Ecommerce Shopping Cart",
+        category: "Web development"
+      }
+    ]});
+  }
+
+  handleAddProject(project) {
+    const projects = this.state.projects.slice();
+    projects.push(project);
+    this.setState({projects: projects});
+  }
+
+  handleDeleteProject(id) {
+    const projects = this.state.projects.filter(project => project.id !== id);
+    this.setState({projects: projects});
+  }
+
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <h1>My app</h1>
+        <h2>My projects </h2>
+        <AddProject addNewProject={this.handleAddProject.bind(this)}/>
+        <Projects projects={this.state.projects}
+                  onDelete={this.handleDeleteProject.bind(this)} />
       </div>
-    );
+      );
   }
 }
 
